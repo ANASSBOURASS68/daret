@@ -14,7 +14,9 @@ let nomcercleerreur = document.querySelector('#nom-cercle-erreur')
 let cotisationerreur = document.querySelector('#cotisation-erreur')
 let datedebuterreur = document.querySelector('#date-debut-erreur')
 let periodiciteerreur = document.querySelector('#periodicite-erreur')
-let chiffres = /^[0-9 a-z A-Z éèàùç -]+$/;
+let chiffres = /^[a-zA-ZÀ-ÿ0-9 -]+$/;
+let participantsliste = document.querySelector('#participants-liste')
+
 // valide nom
 
 function validerNomCercle(){
@@ -30,7 +32,7 @@ function validerNomCercle(){
     function nomcercleerreurmssg(){
         let mssgerreur = nomcercleerreur;
         if(nomcercle.value.trim() === ""){
-            mssgerreur.textContent = "Le nom du cercle est obligatoire";
+            mssgerreur.textContent = "entrer le nom";
             mssgerreur.classList.remove("hidden");
         }
         else if(validerNomCercle() === false){
@@ -56,7 +58,7 @@ function validerNomCercle(){
     function cotisationerreurmssg(){
         let mssgcotisa = cotisationerreur;
         if(cotisation.value.trim()===""){
-            mssgcotisa.textContent="la cotisation est bligatoir";
+            mssgcotisa.textContent="entrer la cotisation";
             mssgcotisa.classList.remove("hidden");
         }else if(validercotisation() === false){
             mssgcotisa.classList.remove("hidden");
@@ -81,7 +83,7 @@ function validedate(){
 function datedebuterreurmssg(){
     let mssgdate = datedebuterreur;
     if(datedebut.value === ""){
-        mssgdate.textContent = "la date est obligatoire";
+        mssgdate.textContent = "entrer la date";
         mssgdate.classList.remove("hidden")
     }else if(validedate() === false){
         mssgdate.classList.remove("hidden");
@@ -111,7 +113,7 @@ return false
 function periodiciteerreurmssg(){
     let mssgperio = periodiciteerreur;
     if(periodicite.value === ""){
-        mssgperio.textContent = "la periodicite est obligatoir";
+        mssgperio.textContent = "entrer la periodicite";
         mssgperio.classList.remove("hidden")
     }else if(validerperiodicite()===false ){
         mssgperio.classList.remove("hidden");
@@ -123,32 +125,26 @@ function periodiciteerreurmssg(){
 }
 periodicite.addEventListener("change",periodiciteerreurmssg)
 
-
 daretform.addEventListener("submit", function(event) {
-    
     event.preventDefault();
-    
+
     nomcercleerreurmssg();
     cotisationerreurmssg();
-    periodiciteerreurmssg();    
     datedebuterreurmssg();
+    periodiciteerreurmssg();
 
-    if(validerNomCercle()===false){
+    if(validerNomCercle() === false){
         nomcercle.focus();
     }else if(validercotisation()===false){
         cotisation.focus();
-    }else if(validerperiodicite() === false){
-        periodicite.focus();
     }else if(validedate()=== false){
         datedebut.focus();
+    }else if(validerperiodicite() === false){
+        periodicite.focus();
     }else{
-        console.log("kolchi mzyan")
+        console.log("kolchi mezyan")
     }
 });
 
 
-
-
-
-    
 
