@@ -14,7 +14,7 @@ let nomcercleerreur = document.querySelector('#nom-cercle-erreur')
 let cotisationerreur = document.querySelector('#cotisation-erreur')
 let datedebuterreur = document.querySelector('#date-debut-erreur')
 let periodiciteerreur = document.querySelector('#periodicite-erreur')
-let chiffres = /^[a-zA-ZÀ-ÿ0-9 -]+$/;
+let chiffres =  /^[0-9 a-z A-Z éèàùç -]+$/;
 let participantsliste = document.querySelector('#participants-liste')
 
 // valide nom
