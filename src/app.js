@@ -2,6 +2,7 @@
 // Le HTML (index.html) est déjà intégré : lis-le, repère les id et les data-*, puis fais-le vivre.
 
 
+let daretform = document.getElementById('daret-form')
 let nomcercle = document.getElementById('nom-cercle')
 let cotisation = document.getElementById('cotisation')
 let periodicite = document.getElementById('periodicite')
@@ -13,12 +14,11 @@ let nomcercleerreur = document.querySelector('#nom-cercle-erreur')
 let cotisationerreur = document.querySelector('#cotisation-erreur')
 let datedebuterreur = document.querySelector('#date-debut-erreur')
 let periodiciteerreur = document.querySelector('#periodicite-erreur')
-
+let chiffres = /^[0-9 a-z A-Z éèàùç -]+$/;
 // valide nom
 
 function validerNomCercle(){
     let nom = nomcercle.value.trim().toLocaleLowerCase();
-    let chiffres = /^[0-9 a-z A-Z éèàùç -]+$/;
     if (nom.length >= 3 && nom.length <= 40 && chiffres.test(nom)) {
     return true;
     }
@@ -30,8 +30,8 @@ function validerNomCercle(){
     function nomcercleerreurmssg(){
         let mssgerreur = nomcercleerreur;
         if(nomcercle.value.trim() === ""){
-            mssgerreur.textContent = "";
-            mssgerreur.classList.add("hidden");
+            mssgerreur.textContent = "Le nom du cercle est obligatoire";
+            mssgerreur.classList.remove("hidden");
         }
         else if(validerNomCercle() === false){
             mssgerreur.classList.remove("hidden");
@@ -56,8 +56,8 @@ function validerNomCercle(){
     function cotisationerreurmssg(){
         let mssgcotisa = cotisationerreur;
         if(cotisation.value.trim()===""){
-            mssgcotisa.textContent="";
-            mssgcotisa.classList.add("hidden");
+            mssgcotisa.textContent="la cotisation est bligatoir";
+            mssgcotisa.classList.remove("hidden");
         }else if(validercotisation() === false){
             mssgcotisa.classList.remove("hidden");
             mssgcotisa.textContent="Nombre Invalide";
@@ -81,8 +81,8 @@ function validedate(){
 function datedebuterreurmssg(){
     let mssgdate = datedebuterreur;
     if(datedebut.value === ""){
-        mssgdate.textContent = "";
-        mssgdate.classList.add("hidden")
+        mssgdate.textContent = "la date est obligatoire";
+        mssgdate.classList.remove("hidden")
     }else if(validedate() === false){
         mssgdate.classList.remove("hidden");
         mssgdate.textContent="Date Invalid"
@@ -111,8 +111,8 @@ return false
 function periodiciteerreurmssg(){
     let mssgperio = periodiciteerreur;
     if(periodicite.value === ""){
-        mssgperio.textContent = "";
-        mssgperio.classList.add("hidden")
+        mssgperio.textContent = "la periodicite est obligatoir";
+        mssgperio.classList.remove("hidden")
     }else if(validerperiodicite()===false ){
         mssgperio.classList.remove("hidden");
         mssgperio.textContent = "Choix invalid";
@@ -122,6 +122,32 @@ function periodiciteerreurmssg(){
     }
 }
 periodicite.addEventListener("change",periodiciteerreurmssg)
+
+
+daretform.addEventListener("submit", function(event) {
+    
+    event.preventDefault();
+    
+    nomcercleerreurmssg();
+    cotisationerreurmssg();
+    periodiciteerreurmssg();    
+    datedebuterreurmssg();
+
+    if(validerNomCercle()===false){
+        nomcercle.focus();
+    }else if(validercotisation()===false){
+        cotisation.focus();
+    }else if(validerperiodicite() === false){
+        periodicite.focus();
+    }else if(validedate()=== false){
+        datedebut.focus();
+    }else{
+        console.log("kolchi mzyan")
+    }
+});
+
+
+
 
 
     
