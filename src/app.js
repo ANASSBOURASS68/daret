@@ -10,8 +10,12 @@ let btnajouterparticipant = document.getElementById('ajouter-participant')
 let btngenerer = document.getElementById('generer')
 let btnreinitialiser = document.getElementById('reinitialiser')
 let nomcercleerreur = document.querySelector('#nom-cercle-erreur')
+let cotisationerreur = document.querySelector('#cotisation-erreur')
+let datedebuterreur = document.querySelector('#date-debut-erreur')
+let periodiciteerreur = document.querySelector('#periodicite-erreur')
 
 // valide nom
+
 function validerNomCercle(){
     let nom = nomcercle.value.trim().toLocaleLowerCase();
     let chiffres = /^[0-9 a-z A-Z éèàùç -]+$/;
@@ -21,17 +25,104 @@ function validerNomCercle(){
     return false;
     }
 
+    //mssg erreure
+
     function nomcercleerreurmssg(){
         let mssgerreur = nomcercleerreur;
-        if(validerNomCercle() === false){
-            mssgerreur.classList.remove("hidden")
+        if(nomcercle.value.trim() === ""){
+            mssgerreur.textContent = "";
+            mssgerreur.classList.add("hidden");
+        }
+        else if(validerNomCercle() === false){
+            mssgerreur.classList.remove("hidden");
             mssgerreur.textContent = 'Nom Invalide';
 
         }else{
             mssgerreur.textContent = "";
-            mssgerreur.classList.add("hidden")
+            mssgerreur.classList.add("hidden");
         }        
     }
-    nomcercle.addEventListener("input",nomcercleerreurmssg)
+    nomcercle.addEventListener("input",nomcercleerreurmssg);
 
+    //valider cotisation
+    function validercotisation(){
+        let cotisa = Number(cotisation.value.trim());
+        if(cotisa >= 100 && cotisa <= 50000 && Number.isInteger(cotisa)){
+            return true ;
+        }
+        return false;
+    }
+    
+    function cotisationerreurmssg(){
+        let mssgcotisa = cotisationerreur;
+        if(cotisation.value.trim()===""){
+            mssgcotisa.textContent="";
+            mssgcotisa.classList.add("hidden");
+        }else if(validercotisation() === false){
+            mssgcotisa.classList.remove("hidden");
+            mssgcotisa.textContent="Nombre Invalide";
+        }else{
+            mssgcotisa.textContent = "";
+            mssgcotisa.classList.add("hidden")
+        }
+    }
+    cotisation.addEventListener("input",cotisationerreurmssg)
+
+// valider la date
+
+function validedate(){
+    let date = datedebut.value
+    let aujourd = new Date().toISOString().split("T")[0];
+    if(date >= aujourd){
+        return true
+    }
+    return false
+}
+function datedebuterreurmssg(){
+    let mssgdate = datedebuterreur;
+    if(datedebut.value === ""){
+        mssgdate.textContent = "";
+        mssgdate.classList.add("hidden")
+    }else if(validedate() === false){
+        mssgdate.classList.remove("hidden");
+        mssgdate.textContent="Date Invalid"
+    }else{
+        mssgdate.textContent="";
+        mssgdate.classList.add("hidden");
+    }
+}
+datedebut.addEventListener("input", datedebuterreurmssg);
+
+
+//valider periodicite
+
+function validerperiodicite(){
+let perio =  periodicite.value;
+if(perio === "hebdomadaire"){
+    return true
+}else if(perio === "quinzaine"){
+    return true;
+}else if(perio ==="mensuelle"){
+return true
+}
+return false
+}
+
+function periodiciteerreurmssg(){
+    let mssgperio = periodiciteerreur;
+    if(periodicite.value === ""){
+        mssgperio.textContent = "";
+        mssgperio.classList.add("hidden")
+    }else if(validerperiodicite()===false ){
+        mssgperio.classList.remove("hidden");
+        mssgperio.textContent = "Choix invalid";
+    }else{
+        mssgperio.textContent = "";
+        mssgperio.classList.add("hidden");
+    }
+}
+periodicite.addEventListener("change",periodiciteerreurmssg)
+
+
+    
 
