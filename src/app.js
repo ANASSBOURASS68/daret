@@ -191,7 +191,6 @@ btnajouterparticipant.addEventListener("click",creerparticipant)
 creerparticipant()
 creerparticipant()
 creerparticipant()
-console.log(btnsupprimer)
 
 function nbrparticipant(){
     let nombreparticipant = participantsliste.children.length;
