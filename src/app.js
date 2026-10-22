@@ -2,6 +2,8 @@
 // Le HTML (index.html) est déjà intégré : lis-le, repère les id et les data-*, puis fais-le vivre.
 
 
+
+let daretform = document.getElementById('daret-form')
 let nomcercle = document.getElementById('nom-cercle')
 let cotisation = document.getElementById('cotisation')
 let periodicite = document.getElementById('periodicite')
@@ -13,12 +15,14 @@ let nomcercleerreur = document.querySelector('#nom-cercle-erreur')
 let cotisationerreur = document.querySelector('#cotisation-erreur')
 let datedebuterreur = document.querySelector('#date-debut-erreur')
 let periodiciteerreur = document.querySelector('#periodicite-erreur')
+let chiffres =  /^[0-9 a-z A-Z éèàùç -]+$/;
+let participantsliste = document.querySelector('#participants-liste')
+let participantscompteur = document.querySelector('#participants-compteur')
 
 // valide nom
 
 function validerNomCercle(){
     let nom = nomcercle.value.trim().toLocaleLowerCase();
-    let chiffres = /^[0-9 a-z A-Z éèàùç -]+$/;
     if (nom.length >= 3 && nom.length <= 40 && chiffres.test(nom)) {
     return true;
     }
@@ -30,8 +34,8 @@ function validerNomCercle(){
     function nomcercleerreurmssg(){
         let mssgerreur = nomcercleerreur;
         if(nomcercle.value.trim() === ""){
-            mssgerreur.textContent = "";
-            mssgerreur.classList.add("hidden");
+            mssgerreur.textContent = "entrer le nom";
+            mssgerreur.classList.remove("hidden");
         }
         else if(validerNomCercle() === false){
             mssgerreur.classList.remove("hidden");
@@ -56,11 +60,11 @@ function validerNomCercle(){
     function cotisationerreurmssg(){
         let mssgcotisa = cotisationerreur;
         if(cotisation.value.trim()===""){
-            mssgcotisa.textContent="";
-            mssgcotisa.classList.add("hidden");
+            mssgcotisa.textContent="entrer la cotisation entre 100 et 50000 ";
+            mssgcotisa.classList.remove("hidden");
         }else if(validercotisation() === false){
             mssgcotisa.classList.remove("hidden");
-            mssgcotisa.textContent="Nombre Invalide";
+            mssgcotisa.textContent="Nombre Invalide entrer un prix entre 100 et 50000";
         }else{
             mssgcotisa.textContent = "";
             mssgcotisa.classList.add("hidden")
@@ -81,8 +85,8 @@ function validedate(){
 function datedebuterreurmssg(){
     let mssgdate = datedebuterreur;
     if(datedebut.value === ""){
-        mssgdate.textContent = "";
-        mssgdate.classList.add("hidden")
+        mssgdate.textContent = "entrer la date";
+        mssgdate.classList.remove("hidden")
     }else if(validedate() === false){
         mssgdate.classList.remove("hidden");
         mssgdate.textContent="Date Invalid"
@@ -111,8 +115,8 @@ return false
 function periodiciteerreurmssg(){
     let mssgperio = periodiciteerreur;
     if(periodicite.value === ""){
-        mssgperio.textContent = "";
-        mssgperio.classList.add("hidden")
+        mssgperio.textContent = "entrer la periodicite";
+        mssgperio.classList.remove("hidden")
     }else if(validerperiodicite()===false ){
         mssgperio.classList.remove("hidden");
         mssgperio.textContent = "Choix invalid";
@@ -123,6 +127,76 @@ function periodiciteerreurmssg(){
 }
 periodicite.addEventListener("change",periodiciteerreurmssg)
 
+daretform.addEventListener("submit", function(event) {
+    event.preventDefault();
 
+    nomcercleerreurmssg();
+    cotisationerreurmssg();
+    datedebuterreurmssg();
+    periodiciteerreurmssg();
+
+    if(validerNomCercle() === false){
+        nomcercle.focus();
+    }else if(validercotisation()===false){
+        cotisation.focus();
+    }else if(validedate()=== false){
+        datedebut.focus();
+    }else if(validerperiodicite() === false){
+        periodicite.focus();
+    }else{
+        console.log("kolchi mezyan")
+    }
+});
+
+
+// part 2
+
+
+function creerparticipant(){
+
+if (participantsliste.children.length < 20) {
+let liste = document.createElement("li")
+liste.classList.add("flex", "items-center", "gap-4")
+
+let inputparticipant = document.createElement("input")
+
+inputparticipant.classList.add("border","rounded","px-3")
+
+
+let btnsupprimer = document.createElement("button")
+btnsupprimer.textContent="Retirer"
+btnsupprimer.classList.add("border","rounded","px-3")
+
+
+liste.appendChild(inputparticipant)
+liste.appendChild(btnsupprimer)
+btnsupprimer.type="button"
+participantsliste.appendChild(liste)
+inputparticipant.type = "text"
+inputparticipant.placeholder="entrer le nom"
+
+btnsupprimer.addEventListener("click", function() {
+    if(participantsliste.children.length > 2){
+        btnsupprimer.parentElement.remove();
+        nbrparticipant()
+    }
     
+    
+});
+}
+nbrparticipant()
+}
+btnajouterparticipant.addEventListener("click",creerparticipant)
+
+creerparticipant()
+creerparticipant()
+creerparticipant()
+console.log(btnsupprimer)
+
+function nbrparticipant(){
+    let nombreparticipant = participantsliste.children.length;
+
+    participantscompteur.textContent= " Particioants : "+ nombreparticipant ;
+
+}
 
