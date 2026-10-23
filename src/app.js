@@ -19,6 +19,16 @@ let chiffres =  /^[0-9 a-z A-Z éèàùç -]+$/;
 let participantsliste = document.querySelector('#participants-liste')
 let participantscompteur = document.querySelector('#participants-compteur')
 
+let contenuresultat = document.querySelector('#contenu-resultat')
+let etatvide = document.querySelector('#etat-vide')
+let resumecagnotte = document.querySelector('#resume-cagnotte')
+let resumetotalcycl = document.querySelector('#resume-total-cycle')
+let resumenbtours = document.querySelector('#resume-nb-tours')
+let resumedates = document.querySelector('#resume-dates')
+
+
+
+
 // valide nom
 
 function validerNomCercle(){
@@ -144,7 +154,21 @@ daretform.addEventListener("submit", function(event) {
     }else if(validerperiodicite() === false){
         periodicite.focus();
     }else{
-        console.log("kolchi mezyan")
+        resumecagnotte.textContent = montontrecu(cotisation.value ,participantsliste.children.length ) + " MAD ";
+        resumetotalcycl.textContent =totalVerseCycle(cotisation.value ,participantsliste.children.length )
+        resumenbtours.textContent = calculerNbTours(participantsliste.children.length)
+
+        resumedates.textContent =
+        new Date(datedebut.value).toLocaleDateString("fr-FR") + " - " +
+        calculerDateDernierTour(
+        datedebut.value,
+        participantsliste.children.length,
+        periodicite.value
+        ).toLocaleDateString("fr-FR");
+
+
+        contenuresultat.classList.remove("hidden");
+        etatvide.classList.add("hidden");
     }
 });
 
@@ -195,7 +219,59 @@ creerparticipant()
 function nbrparticipant(){
     let nombreparticipant = participantsliste.children.length;
 
+
     participantscompteur.textContent= " Particioants : "+ nombreparticipant ;
 
+}
+
+
+//part 3
+
+
+function montontrecu(cotisation , nbparticipant){
+    return cotisation*nbparticipant
+}
+
+function totalVerseCycle(cotisation , nbtours){
+    return  cotisation*nbtours
+    
+}
+
+function calculerNbTours(nbparticipant){
+    return nbparticipant
+}
+
+function calculerDateDernierTour(dateDebut, nbtours, periodicite) {
+    let date = new Date(dateDebut);
+    let jourInitial = date.getDate();
+    let nbajouts = nbtours - 1;
+    let intervalle = 0;
+
+    if (periodicite === "hebdomadaire") {
+        intervalle = 7;
+    } else if (periodicite === "quinzaine") {
+        intervalle = 15;
+    }
+
+    for (let i = 0; i < nbajouts; i++) {
+        if (periodicite === "mensuelle") {
+            let mois = date.getMonth() + 1;
+            let annee = date.getFullYear();
+
+            if (mois > 11) {
+                mois = 0;
+                annee++;
+            }
+
+            let dernierJour = new Date(annee, mois + 1, 0).getDate();
+            let jour = Math.min(jourInitial, dernierJour);
+
+            date.setFullYear(annee, mois, jour);
+        } else {
+            date.setDate(date.getDate() + intervalle);
+        }
+    }
+
+    return date;
 }
 
