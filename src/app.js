@@ -26,6 +26,7 @@ let resumetotalcycl = document.querySelector('#resume-total-cycle')
 let resumenbtours = document.querySelector('#resume-nb-tours')
 let resumedates = document.querySelector('#resume-dates')
 
+
 let calendriercorps = document.querySelector('#calendrier-corps')
 
 //part 5 vr
@@ -33,6 +34,8 @@ let btntirage = document.getElementById("tirage-au-sort");
 let btnordresaisie = document.getElementById("ordre-saisie");
 
 let ordreTours = null;
+
+
 
 
 
@@ -177,7 +180,10 @@ daretform.addEventListener("submit", function(event) {
 
         contenuresultat.classList.remove("hidden");
         etatvide.classList.add("hidden");
+
         genererCalendrier();
+
+
     }
 });
 
@@ -259,7 +265,7 @@ function calculerDateDernierTour(dateDebut, nbtours, periodicite) {
     if (periodicite === "hebdomadaire") {
         intervalle = 7;
     } else if (periodicite === "quinzaine") {
-        intervalle = 14;
+        intervalle = 15;
     }
 
     for (let i = 0; i < nbajouts; i++) {
@@ -283,6 +289,7 @@ function calculerDateDernierTour(dateDebut, nbtours, periodicite) {
 
     return date;
 }
+
 
 //part 4
 
@@ -323,22 +330,6 @@ function creerLigneTour(numero, dateDebut, beneficiaire, totalcotisa , periodici
 }
 
 
-function genererCalendrier() {
-
-    let totalcotisa = Number(cotisation.value)*participantsliste.children.length
-
-    calendriercorps.textContent = "";
-
-    for (let i = 0; i < participantsliste.children.length; i++) {
-        let numero = i + 1;
-        let participant = participantsliste.children[i];
-        let beneficiaire = participant.querySelector("input").value;
-
-        let ligne = creerLigneTour(numero,datedebut.value,beneficiaire,totalcotisa,periodicite.value,"À venir");
-
-        calendriercorps.appendChild(ligne);
-    }
-}
 
 //part 5 
 
@@ -393,7 +384,4 @@ btnordresaisie.addEventListener("click", function () {
     ordreTours = null;
     genererCalendrier();
 });
-
-
-
 
