@@ -27,6 +27,17 @@ let resumenbtours = document.querySelector('#resume-nb-tours')
 let resumedates = document.querySelector('#resume-dates')
 
 
+let calendriercorps = document.querySelector('#calendrier-corps')
+
+//part 5 vr
+let btntirage = document.getElementById("tirage-au-sort");
+let btnordresaisie = document.getElementById("ordre-saisie");
+
+let ordreTours = null;
+
+
+
+
 
 
 // valide nom
@@ -169,6 +180,10 @@ daretform.addEventListener("submit", function(event) {
 
         contenuresultat.classList.remove("hidden");
         etatvide.classList.add("hidden");
+
+        genererCalendrier();
+
+
     }
 });
 
@@ -274,4 +289,99 @@ function calculerDateDernierTour(dateDebut, nbtours, periodicite) {
 
     return date;
 }
+
+
+//part 4
+
+
+
+
+function creerLigneTour(numero, dateDebut, beneficiaire, totalcotisa , periodicite, statut) {
+    let ligne = document.createElement("tr");
+
+    let celule1 = document.createElement("td");
+    let celule2 = document.createElement("td");
+    let celule3 = document.createElement("td");
+    let celule4 = document.createElement("td");
+    let celule5 = document.createElement("td");
+
+    let date = calculerDateDernierTour( dateDebut,numero,periodicite).toLocaleDateString("fr-FR",{
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
+    celule1.textContent = numero;
+    ligne.appendChild(celule1);
+
+    celule2.textContent = date;
+    ligne.appendChild(celule2);
+
+    celule3.textContent = beneficiaire;
+    ligne.appendChild(celule3);
+
+    celule4.textContent = totalcotisa + "MAD";
+    ligne.appendChild(celule4);
+
+    celule5.textContent = statut;
+    ligne.appendChild(celule5);
+
+    return ligne;
+}
+
+
+
+//part 5 
+
+
+function genererCalendrier() {
+    let participants = ordreTours || Array.from(participantsliste.children);
+
+    let totalcotisa = Number(cotisation.value) * participants.length;
+
+    calendriercorps.textContent = "";
+
+    for (let i = 0; i < participants.length; i++) {
+        let participant = participants[i];
+        let beneficiaire = participant.querySelector("input").value;
+        let numero = i + 1;
+
+        let ligne = creerLigneTour(
+            numero,
+            datedebut.value,
+            beneficiaire,
+            totalcotisa,
+            periodicite.value,
+            "À venir"
+        );
+
+        calendriercorps.appendChild(ligne);
+    }
+}
+
+
+function melangerParticipants() {
+    let participants = Array.from(participantsliste.children);
+
+    for (let i = participants.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+
+        let temporaire = participants[i];
+        participants[i] = participants[j];
+        participants[j] = temporaire;
+    }
+
+    return participants;
+}
+
+
+btntirage.addEventListener("click", function () {
+    ordreTours = melangerParticipants();
+    genererCalendrier();
+});
+
+btnordresaisie.addEventListener("click", function () {
+    ordreTours = null;
+    genererCalendrier();
+});
 
