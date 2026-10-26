@@ -35,6 +35,9 @@ let btnordresaisie = document.getElementById("ordre-saisie");
 
 let ordreTours = null;
 
+//part 6 vr
+
+let compteurtours = document.querySelector('#compteur-tours');
 
 
 
@@ -298,12 +301,19 @@ function calculerDateDernierTour(dateDebut, nbtours, periodicite) {
 
 function creerLigneTour(numero, dateDebut, beneficiaire, totalcotisa , periodicite, statut) {
     let ligne = document.createElement("tr");
+    ligne.dataset.tour = numero;
 
     let celule1 = document.createElement("td");
     let celule2 = document.createElement("td");
     let celule3 = document.createElement("td");
     let celule4 = document.createElement("td");
     let celule5 = document.createElement("td");
+    let celule6 = document.createElement("td");
+    let boutonStatut = document.createElement("button");
+    boutonStatut.textContent="Marquer comme terminé"
+    boutonStatut.type="button"
+    boutonStatut.dataset.action = "basculer-statut";
+
 
     let date = calculerDateDernierTour( dateDebut,numero,periodicite).toLocaleDateString("fr-FR",{
         day: "numeric",
@@ -325,6 +335,9 @@ function creerLigneTour(numero, dateDebut, beneficiaire, totalcotisa , periodici
 
     celule5.textContent = statut;
     ligne.appendChild(celule5);
+
+    celule6.appendChild(boutonStatut);
+    ligne.appendChild(celule6);
 
     return ligne;
 }
@@ -357,6 +370,8 @@ function genererCalendrier() {
 
         calendriercorps.appendChild(ligne);
     }
+    actualiserCompteurTours();
+    actualiserProchainTour();
 }
 
 
@@ -385,3 +400,66 @@ btnordresaisie.addEventListener("click", function () {
     genererCalendrier();
 });
 
+
+//part 6
+
+
+calendriercorps.addEventListener("click", function(event) {
+    let bouton = event.target.closest("button");
+
+    if (bouton === null) {
+    return;
+    }
+    if (bouton.dataset.action !== "basculer-statut") {
+        return;
+    }
+    let ligne = bouton.closest("tr");
+    let statut = ligne.children[4];
+
+    if(statut.textContent==="À venir"){
+        statut.textContent="Terminé"
+        bouton.textContent = "Annuler";
+        ligne.classList.add("ligne-terminee")
+    }else{
+        statut.textContent="À venir";
+        bouton.textContent = "Marquer comme terminé";
+        ligne.classList.remove("ligne-terminee")
+    }
+    actualiserCompteurTours()
+    actualiserProchainTour();
+});
+
+
+
+function actualiserCompteurTours() {
+    let nombreTermines = 0;
+
+    for (let i = 0; i < calendriercorps.children.length; i++) {
+        let ligne = calendriercorps.children[i];
+        let statut = ligne.children[4];
+
+        if (statut.textContent === "Terminé") {
+            nombreTermines++;
+        }
+    }
+
+    compteurtours.textContent =
+        nombreTermines + " tours terminés sur " + calendriercorps.children.length;
+}
+
+function actualiserProchainTour() {
+    for (let i = 0; i < calendriercorps.children.length; i++) {
+        let ligne = calendriercorps.children[i];
+        ligne.classList.remove("prochain-tour");
+    }
+
+    for (let i = 0; i < calendriercorps.children.length; i++) {
+        let ligne = calendriercorps.children[i];
+        let statut = ligne.children[4];
+
+        if (statut.textContent === "À venir") {
+            ligne.classList.add("prochain-tour");
+            break;
+        }
+    }
+}
